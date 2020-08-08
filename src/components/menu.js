@@ -1,21 +1,24 @@
+// src/components/menu.js
 import React from "react"
-import { Link, useStaticQuery, graphql } from "gatsby"
-import { Menu, Button, Grid, Box } from "@chakra-ui/core"
-import { normalizePath } from "../utils/get-url-path"
+import { useStaticQuery, graphql } from "gatsby"
+import UniversalLink from "../utils/universalLink"
+import style from "../styles/scss/mainNav.module.css"
 
-export default () => {
+const Menu = () => {
   const { wpMenu } = useStaticQuery(graphql`
     {
-      wpMenu(slug: { eq: "main-menu" }) {
+      wpMenu(slug: { eq: "primary-menu" }) {
         name
         menuItems {
           nodes {
             label
             url
-            parentId
-            connectedObject {
-              ... on WpContentNode {
-                uri
+
+            connectedNode {
+              node {
+                ... on WpContentNode {
+                  uri
+                }
               }
             }
           }
@@ -24,31 +27,37 @@ export default () => {
     }
   `)
 
-  return !!wpMenu && !!wpMenu.menuItems && !!wpMenu.menuItems.nodes ? (
-    <Box mb={10} style={{ maxWidth: `100%` }}>
-      <Menu>
-        <Grid autoFlow="column">
-          {wpMenu.menuItems.nodes.map((menuItem, i) => {
-            if (menuItem.parentId) {
-              return null
-            }
+  if (!wpMenu?.menuItems?.nodes || wpMenu.menuItems.nodes === 0) return null
 
-            const path = menuItem?.connectedObject?.uri ?? menuItem.url
+  return (
+    <nav className={style.navigation}>
+      <ul>
+        {wpMenu.menuItems.nodes.map((menuItem, i) => {
+          const path = menuItem?.connectedNode?.node?.uri ?? menuItem.url
 
-            return (
-              <Link
-                key={i + menuItem.url}
-                style={{ display: `block` }}
-                to={normalizePath(path)}
+        // const itemId = "menu-item-" + menuItem.menuItemId
+
+          return (
+            <li
+            //  id={itemId}
+              key={i + menuItem.url}
+              //className={
+                //"menu-item menu-item-type-custom menu-item-object-custom menu-item-home " +
+              // itemId
+            //  }
+            >
+              <UniversalLink
+                to={path}
+              //  activeClassName={"current-menu-item current_page_item"}
               >
-                <Button w="100%" as={Button}>
-                  {menuItem.label}
-                </Button>
-              </Link>
-            )
-          })}
-        </Grid>
-      </Menu>
-    </Box>
-  ) : null
+                {menuItem.label}
+              </UniversalLink>
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
 }
+
+export default Menu

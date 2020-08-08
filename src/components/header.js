@@ -1,24 +1,47 @@
+// src/components/header.js
 import React from "react"
-import { Heading, Box, Grid } from "@chakra-ui/core"
-import { Link } from "gatsby"
-import GatsbyLogo from "../assets/svg/gatsby.inline.svg"
+import { graphql, Link, useStaticQuery } from "gatsby"
+import Menu from "./Menu"
+import style from "../styles/scss/header.module.css"
+import logo from '../images/gatsby-icon.png'
 
-export default () => (
-  <Heading as="h1">
-    <Link to="/">
-      <Grid gridTemplateColumns="50px 1fr" gridGap="20px">
-        <Box maxW={50}>
-          <GatsbyLogo />
-        </Box>
-        <span
-          style={{
-            transform: `translateY(5px)`,
-            display: `inline-block`,
-          }}
-        >
-          Gatsby Source WordPress V4 demo
-        </span>
-      </Grid>
-    </Link>
-  </Heading>
-)
+
+const Header = ( ) => {
+  const { wp } = useStaticQuery(graphql`
+    {
+      wp {
+        generalSettings {
+          title
+          description
+        }
+      }
+    }
+  `)
+  return (
+    <header className={style.masthead}>
+      <div className={style.masthead_info}>
+
+         <Link to="/">
+           <img src={logo} alt="logo" width="100" height="100" display="inline-block" marginBottom= "0"  className={style.site_logo} />
+          </Link>
+          <div className={style.site_header} >
+              <div className={style.site_title}>
+                <Link
+                  to="/"
+                  dangerouslySetInnerHTML={{ __html: wp.generalSettings.title }} />
+                </div>
+              <div className={style.site_description}
+                  dangerouslySetInnerHTML={{
+                    __html: wp.generalSettings.description }} />
+              </div>
+
+           </div>
+
+
+         <Menu /> 
+
+    </header>
+  )
+}
+
+export default Header

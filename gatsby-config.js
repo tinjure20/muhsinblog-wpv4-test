@@ -22,7 +22,8 @@ module.exports = {
       options: {
         url:
           process.env.WPGRAPHQL_URL ||
-          `https://dev-gatsby-source-wordpress-v4.pantheonsite.io/graphql`,
+          `https://tinjurewp.com/gatsby-wpv4/graphql`,
+          //`http://localhost/gatsby-wpv4/graphql`,
         verbose: true,
         develop: {
           hardCacheMediaFiles: true,
@@ -44,8 +45,9 @@ module.exports = {
         },
       },
     },
-    `gatsby-plugin-chakra-ui`,
+   // `gatsby-plugin-chakra-ui`,
     `gatsby-transformer-sharp`,
+    `gatsby-plugin-sass`,
     {
       resolve: "gatsby-plugin-react-svg",
       options: {

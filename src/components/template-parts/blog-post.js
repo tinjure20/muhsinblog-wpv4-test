@@ -4,6 +4,7 @@ import { Link } from "gatsby"
 import { Box, Heading } from "@chakra-ui/core"
 import Img from "gatsby-image"
 import Layout from "../../components/layout"
+import "./postNav.css"
 import { normalizePath } from "../../utils/get-url-path"
 
 function BlogPost({ data }) {
@@ -25,15 +26,23 @@ function BlogPost({ data }) {
       <p dangerouslySetInnerHTML={{ __html: content }} />
 
       <br />
+      {/* add pagination styling */}
+      
+      <div className="post-navigation">
+     <div className="nav-links"> 
+
       {!!nextPage && (
-        <Link to={normalizePath(nextPage.uri)}>Next: {nextPage.title}</Link>
-      )}
-      <br />
-      {!!previousPage && (
-        <Link to={normalizePath(previousPage.uri)}>
-          Previous: {previousPage.title}
-        </Link>
-      )}
+          <Link className="nav_next" to={normalizePath(nextPage.uri)}>Next: {nextPage.title}</Link>
+        )}
+        <br />
+        {!!previousPage && (
+          <Link className="nav_previous" to={normalizePath(previousPage.uri)}>
+            Previous: {previousPage.title}
+          </Link>
+        )}
+    </div> 
+    </div>
+
     </Layout>
   )
 }
