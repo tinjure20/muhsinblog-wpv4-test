@@ -7,6 +7,19 @@ require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
+// environment variables
+let activeEnv =
+  process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || "development"
+
+console.log(`Using environment config: '${activeEnv}'`)
+
+require("dotenv").config({
+  path: `.env.${activeEnv}`,
+})
+
+console.log(`This WordPress Endpoint is used: '${process.env.WORDPRESS_URL}'`)
+
+
 module.exports = {
   plugins: [
     `gatsby-plugin-sharp`,
@@ -22,8 +35,7 @@ module.exports = {
       options: {
         url:
           process.env.WPGRAPHQL_URL ||
-          `https://tinjurewp.com/gatsby-wpv4/graphql`,
-          //`http://localhost/gatsby-wpv4/graphql`,
+          `${process.env.WORDPRESS_URL}/graphql`,
         verbose: true,
         develop: {
           hardCacheMediaFiles: true,
